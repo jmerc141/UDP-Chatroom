@@ -1,4 +1,4 @@
-import socket, threading, os, queue
+import socket, threading, os, queue, time
 from user import User
 
 #Server Code
@@ -23,6 +23,7 @@ def serv():
     threading.Thread(target=recv,args=(s,recvPackets)).start()
 
     while True:
+        time.sleep(0.1)
         while not recvPackets.empty():
             # received packet
             data, addr = recvPackets.get()
@@ -49,7 +50,7 @@ def serv():
             if data.endswith('!exit'):
                 for u in usernames.copy():         # remove client
                     if u.client == addr:
-                        print('removing ', u)
+                        print('removing', u)
                         usernames.remove(u)
                         broadcast(u.username + ' has left', usernames, s, addr)
                 continue
